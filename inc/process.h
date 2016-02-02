@@ -7,5 +7,5 @@
 
 #ifndef _PROCESS_H_
 #define _PROCESS_H_
-	int CreateSubProcess();	
+	int process_CreateSub();	
 #endif

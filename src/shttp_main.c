@@ -6,10 +6,15 @@
  ************************************************************************/
 
 #include "common.h"
+void sig_exit()
+{}
 int main(int arg,char **argv)
 {
     int ret;
     
+    //初始化信号处理
+    signal_init();
+    //开始监听
     int listenfd=connect_socket_start();
     if (listenfd<0)
     {
@@ -17,10 +22,13 @@ int main(int arg,char **argv)
     }
 	printf("listenfd:%d\n",listenfd);
     
-    ret=CreateSubProcess();
+    //创建子进程
+    ret=process_CreateSub();
     if(0==ret)//父进程
     {
+        pause();
         printf("parent process\n");
+        
     }
     else if(1==ret)//子进程
     {
@@ -32,5 +40,7 @@ int main(int arg,char **argv)
     }
     
     printf("Server Close\n");
+    
+    close(listenfd);
 	return 0;
 }

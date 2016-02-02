@@ -6,8 +6,8 @@
  ************************************************************************/
 
 
-#ifndef _CONFIG_H
-#define _CONFIG_H
+#ifndef _CONFIG_H_
+#define _CONFIG_H_
 	#define LISTEN_PORT 8888
 	#define MAX_LISTEN 100
 	#define PROCESS_NUM 3

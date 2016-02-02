@@ -1,11 +1,13 @@
 /*************************************************************************
-    > File Name: pro_add.h
+    > File Name: signal.h
     > Author: 浅握双手
     > ---------------- 
-    > Created Time: 2016年01月30日 14时54分54秒 CST
+    > Created Time: 2016年02月02日 21时09分48秒 CST
  ************************************************************************/
 
-#ifndef _PRO_ADD_H
-#define _PRO_ADD_H
-	int pro_add(int a,int b);
+#ifndef _SIGNAL_H_
+#define _SIGNAL_H_
+
+    void signal_exit();
+    int signal_init();
 #endif

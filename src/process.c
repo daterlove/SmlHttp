@@ -8,9 +8,9 @@
 #include "common.h"
 
 //管理子进程的数组 
-int g_ProcessARrr[PROCESS_NUM];  
+int g_ProcessArr[PROCESS_NUM];  
 
-int CreateSubProcess()//创建进程
+int process_CreateSub()//创建进程
 {
     int i;
     for(i=0;i<PROCESS_NUM;i++)
@@ -22,7 +22,7 @@ int CreateSubProcess()//创建进程
         }
         else if(pid>0)//父进程
         {
-            g_ProcessARrr[i]=pid;
+            g_ProcessArr[i]=pid;
         }
         else//出错
         {

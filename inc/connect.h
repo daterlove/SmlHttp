@@ -5,7 +5,7 @@
     > Created Time: 2016年01月30日 14时54分54秒 CST
  ************************************************************************/
 
-#ifndef _CONNECT_H
-#define _CONNECT_H
+#ifndef _CONNECT_H_
+#define _CONNECT_H_
 	int connect_socket_start();
 #endif
