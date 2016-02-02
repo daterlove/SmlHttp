@@ -1,13 +1,11 @@
 /*************************************************************************
-    > File Name: main.c
+    > File Name: process.h
     > Author: 浅握双手
     > ---------------- 
-    > Created Time: 2016年01月30日 14时58分54秒 CST
+    > Created Time: 2016年02月02日 14时53分49秒 CST
  ************************************************************************/
 
-#include "common.h"
-int main(int arg,char **argv)
-{
-	printf("%d--\n",NumAdd(3,5));
-    return 0;
-}
+#ifndef _PROCESS_H_
+#define _PROCESS_H_
+	int CreateSubProcess();	
+#endif

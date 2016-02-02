@@ -10,5 +10,6 @@
 #define _CONFIG_H
 	#define LISTEN_PORT 8888
 	#define MAX_LISTEN 100
+	#define PROCESS_NUM 3
 #endif
 

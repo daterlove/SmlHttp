@@ -19,7 +19,7 @@
 #include <fcntl.h>
 
 #include "connect.h"
-#include "connect.h"
+#include "config.h"
 
 #endif
 
