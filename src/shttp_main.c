@@ -6,7 +6,13 @@
  ************************************************************************/
 
 #include "common.h"
-void main()
+int main(int arg,char **argv)
 {
-	printf("%d--\n",NumAdd(3,5));
+    int listenfd=connect_socket_start();
+    if (listenfd<0)
+    {
+        return -1;
+    }
+	printf("listenfd:%d\n",listenfd);
+	return 0;
 }

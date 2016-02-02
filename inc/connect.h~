@@ -7,5 +7,6 @@
 
 #ifndef _CONNECT_H
 #define _CONNECT_H
+	int NumAdd(int a,int b);
 	int connect_socket_start();
 #endif

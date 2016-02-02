@@ -4,10 +4,10 @@ DIR_OBJ = ./obj
 DIR_BIN = ./bin
 
 TARGET = SmlHttp
-CC = gcc
+CC = g++
 
-SRC = $(wildcard ${DIR_SRC}/*.c)  
-OBJ = $(patsubst %.c,${DIR_OBJ}/%.o,$(notdir ${SRC})) 
+SRC = $(wildcard ${DIR_SRC}/*.cpp)  
+OBJ = $(patsubst %.cpp,${DIR_OBJ}/%.o,$(notdir ${SRC})) 
 BIN_TARGET = ${DIR_BIN}/${TARGET}
 
 
