@@ -10,7 +10,6 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <pthread.h>
-
 #include <errno.h>
 #include <limits.h>
 #include <sys/types.h>
@@ -18,11 +17,12 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <fcntl.h>
+#include<sys/epoll.h>
 
-#include "signal_handle.h"
-#include "connect.h"
 #include "config.h"
-#include "process.h"
+#include "shttp_signal.h"
+#include "shttp_connect.h"
+#include "shttp_process.h"
 
 #endif
 

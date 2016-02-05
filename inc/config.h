@@ -11,5 +11,7 @@
 	#define LISTEN_PORT 8888
 	#define MAX_LISTEN 100
 	#define PROCESS_NUM 3
+    #define MAX_BUFFER_SIZE 3000
+    #define MAX_EVENTS 500
 #endif
 
