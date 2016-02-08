@@ -8,5 +8,6 @@
 
 #ifndef _SHTTP_EPOLL_H_
 #define _SHTTP_EPOLL_H_
-
+    int epoll_init(int listendfd);
+    int epoll_add_sockfd(int epollfd,int sockfd);
 #endif

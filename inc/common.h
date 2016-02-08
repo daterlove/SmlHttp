@@ -23,6 +23,7 @@
 #include "shttp_signal.h"
 #include "shttp_connect.h"
 #include "shttp_process.h"
+#include "shttp_epoll.h"
 
 #endif
 

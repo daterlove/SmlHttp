@@ -67,17 +67,9 @@ int main(int arg,char **argv)
 	struct sockaddr_in client;//客户端地址
 	int len=sizeof(struct sockaddr_in);
     
-    //创建epoll句柄
-	epollfd=epoll_create(MAX_EVENTS);
-    
-    ev.data.fd=listenfd;
-	ev.events=EPOLLIN;
-	rv=	epoll_ctl(epollfd,EPOLL_CTL_ADD,listenfd,&ev);//将监听fd加入触发事件
-	if(rv<0)
-	{
-		perror("epoll_ctrl err");
-		return -1;
-	}
+    //创建epoll句柄,并加入监听套接字
+    epollfd=epoll_init(listenfd);
+  
     int i;
 	while(1)
 	{
@@ -92,15 +84,13 @@ int main(int arg,char **argv)
 		{
 			if(events[i].data.fd == listenfd)
 			{
-				sockfd=accept(listenfd,(struct sockaddr *)&client,&len);
+				sockfd=accept(listenfd,(struct sockaddr *)&client,(socklen_t *)&len);
 				if(sockfd<0)
 				{
 					perror("accept error");
 					continue;
 				}
-				ev.data.fd=sockfd;
-				ev.events=EPOLLIN | EPOLLET;
-				epoll_ctl(epollfd,EPOLL_CTL_ADD,sockfd,&ev);
+                epoll_add_sockfd(epollfd,sockfd);
 				continue;
 			}
 			else
