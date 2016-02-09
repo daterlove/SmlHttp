@@ -6,25 +6,6 @@
  ************************************************************************/
 
 #include "common.h"
-int Process_data(int sockfd)
-{
-	int bytes;
-	char buf[MAX_BUFFER_SIZE];
-	bytes=recv(sockfd,buf,MAX_BUFFER_SIZE,0);
-	if(bytes<0)
-	{
-		perror("recv err");
-		return -1;
-	}
-	if(bytes == 0)
-	{
-		printf("客户端关闭连接\n---------------\n");
-		return -2;
-	}
-	printf("收到信息buf:\n%s\n",buf);
-	send(sockfd,buf,strlen(buf),0);
-	return 0;
-}
 
 int main(int arg,char **argv)
 {
@@ -33,7 +14,7 @@ int main(int arg,char **argv)
     //初始化信号处理
     signal_init();
     //开始监听
-    int listenfd=connect_socket_start();
+    int listenfd=socket_listen();
     if (listenfd<0)
     {
         return -1;
@@ -95,7 +76,8 @@ int main(int arg,char **argv)
 			}
 			else
 			{
-				rv=Process_data(events[i].data.fd);
+                //处理连接请求
+				rv=request_handle(events[i].data.fd);
 				if(rv == -2)
 				{
 					epoll_ctl(epollfd,EPOLL_CTL_DEL,events[i].data.fd,&ev);

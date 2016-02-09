@@ -17,13 +17,15 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <fcntl.h>
-#include<sys/epoll.h>
+#include <sys/epoll.h>
+#include <ctype.h>
 
 #include "config.h"
 #include "shttp_signal.h"
-#include "shttp_connect.h"
+#include "shttp_socket.h"
 #include "shttp_process.h"
 #include "shttp_epoll.h"
+#include "shttp_request.h"
 
 #endif
 
