@@ -44,10 +44,10 @@ int main(int arg,char **argv)
     */
     //int sockfd;
     int epollfd,fds;
-    struct epoll_event ev,events[MAX_EVENTS];//epoll触发事件
-    int rv;
-	struct sockaddr_in client;//客户端地址
-	int len=sizeof(struct sockaddr_in);
+    struct epoll_event events[MAX_EVENTS];//epoll触发事件
+  //  int rv;
+	//struct sockaddr_in client;//客户端地址
+	//int len=sizeof(struct sockaddr_in);
     
     //创建epoll句柄,并加入监听套接字
     epollfd=epoll_init(listenfd);

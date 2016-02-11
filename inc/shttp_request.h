@@ -8,5 +8,6 @@
 #ifndef _SHTTP_REQUEST_H_
 #define _SHTTP_REQUEST_H_
 
+    void request_parse_url(char *buf,int bufsize,char *url,int linesize);
     int request_handle(int listenfd,int client,int epollfd);
 #endif
