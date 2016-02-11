@@ -7,5 +7,7 @@
 
 #ifndef _SHTTP_RESPONSE_H_
 #define _SHTTP_RESPONSE_H_
+    void response_head_200(int client);
     void response_unimplement_501(int client);
+    void response_notfound_404(int client);
 #endif

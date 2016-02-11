@@ -6,13 +6,33 @@
  ************************************************************************/
 
 #include "common.h"
+int get_exe_dir(char *path,int size)
+{
+    int count; 
+    count = readlink( "/proc/self/exe", path, size ); 
 
+    if ( count < 0 || count >= size ) 
+    { 
+        return -1; 
+    } 
+
+    while(count>0 && path[count]!='/')//最后一个斜杠处
+        count--;
+    path[count]=0;
+
+    return 0;
+}
 void request_parse_url(char *buf,int bufsize,char *url,int linesize)
 {
     int i = 0,j = 0;
+  
     //获取第一个空格位置，保存在j里
-    while (isspace(buf[j]) && (j < sizeof(buf)))
+    while (!isspace(buf[j]) && (j < bufsize))
+    {
         j++;
+    }
+    j++;//跳过空格
+ 
     //保存第一空格到第二空格之间的 url地址
     while (!isspace(buf[j]) && (i < linesize-1) && (j < bufsize-1))
     {
@@ -38,7 +58,7 @@ int request_handle(int listenfd,int client,int epollfd)
 	}
 	else
 	{
-        //bytes=recv(client,buf,MAX_BUFFER_SIZE,0);
+        //循环读取
         bytes=socket_read(client,buf,MAX_BUFFER_SIZE);
         if(bytes<0)
         {
@@ -46,12 +66,46 @@ int request_handle(int listenfd,int client,int epollfd)
         }
         else if(bytes>0)
         {
+            //解析url地址
             request_parse_url(buf,bytes,url,MAX_LINE_SIZE);
-            //printf("bytes:%d,收到信息buf:\n%s",bytes,buf);
+            printf("bytes:%d,收到信息buf:\n%s",bytes,buf);
             printf("url:%s\n\n",url);
+            
             if(strncmp ( buf, "GET", 3 ) == 0)
             {
-                sprintf(path, "%s%s", DIR_HTDOCS,url);
+                char cur_dir[MAX_LINE_SIZE];
+                
+                ret=get_exe_dir(cur_dir,MAX_LINE_SIZE);//获取当前目录
+                if(ret < 0) return -1; 
+                 
+                sprintf(path, "%s/%s%s", cur_dir,DIR_HTDOCS,url);
+                
+                if (path[strlen(path) - 1] == '/')
+                {
+                    strcat(path, "index.html");//首页路径
+                }       
+            #ifdef DEBUG    
+                printf("cur_dir:%s\n",cur_dir);
+                printf("path:%s\n",path);
+            #endif    
+                struct stat st;
+                if (stat(path, &st) == -1)//读取文件失败
+                {
+                    perror("stat");
+                    response_notfound_404(client);
+                } 
+                else
+                {
+                    off_t offset=0;
+                    int fd = open(path, O_RDONLY);
+                    
+                    //发送协议头
+                    response_head_200(client);
+                    //发送文件
+                    sendfile(client,fd,&offset,st.st_size);
+                    close(fd);
+                    close(client);
+                }      
             }
             else
             {
