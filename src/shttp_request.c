@@ -9,20 +9,21 @@
 void request_parse_method(char *buf,int bufsize,char *method,char *url)
 {
     int i = 0,j = 0;
+    /*
     while (!isspace(buf[j]) && (i < sizeof(MAX_BUFFER_SIZE) - 1))
     {
         method[i] = buf[j];
         i++; j++;
     }
     method[i] = '\0';  
-   
+   */
     //获取第一个空格位置，保存在j里
     while (isspace(buf[j]) && (j < sizeof(buf)))
         j++;
     
-    i=0;
+   // i=0;
     //保存第一空格到第二空格之间的 url地址
-    while (!isspace(buf[j]) && (i < sizeof(url) - 1) && (j < sizeof(buf)))
+    while (!isspace(buf[j]) && (i < MAX_LINE_SIZE-1) && (j < MAX_BUFFER_SIZE-1))
     {
         url[i] = buf[j];
         i++; j++;
@@ -31,12 +32,11 @@ void request_parse_method(char *buf,int bufsize,char *method,char *url)
 }
 int request_handle(int listenfd,int client,int epollfd)
 {
-    int ret;
-    int bytes;
+    int ret,bytes;
 	char buf[MAX_BUFFER_SIZE];
     char method[MAX_BUFFER_SIZE]; 
-    char url[MAX_BUFFER_SIZE];
-    
+    char url[MAX_LINE_SIZE];
+    char path[MAX_LINE_SIZE];
     if(listenfd == client)//如果是监听连接
 	{
 		ret=socket_ET_accept(listenfd,epollfd);
@@ -58,13 +58,13 @@ int request_handle(int listenfd,int client,int epollfd)
             request_parse_method(buf,bytes,method,url);
             //printf("bytes:%d,收到信息buf:\n%s",bytes,buf);
             printf("method:%s,url:%s\n\n",method,url);
-            if(!strncmp ( buf, "GET", 3 ) == 0)
+            if(strncmp ( buf, "GET", 3 ) == 0)
             {
-                response_unimplement_501(client);//发送给客户端501错误
+                sprintf(path, "%s%s", DIR_HTDOCS,url);
             }
             else
             {
-                response_notfound_404(client);
+                response_unimplement_501(client);//发送给客户端501错误
             }
             
         }

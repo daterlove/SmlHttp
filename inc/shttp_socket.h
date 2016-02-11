@@ -9,4 +9,7 @@
 #define _SHTTP_CONNECT_H_
 	int socket_listen();
     int socket_getline(int sock,char *buf,int size);
+    // 在ET模式下必须循环accept到返回-1为止,并加入epoll事件
+    int socket_ET_accept(int listenfd,int epollfd);
+    int socket_read(int sock,char *buf,int bufsize);
 #endif
