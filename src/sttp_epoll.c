@@ -31,6 +31,6 @@ int epoll_add_sockfd(int epollfd,int sockfd)
     struct epoll_event ev;
     ev.data.fd=sockfd;
 	ev.events=EPOLLIN | EPOLLET;
-	epoll_ctl(epollfd,EPOLL_CTL_ADD,sockfd,&ev);
-    return 0;
+	int ret=epoll_ctl(epollfd,EPOLL_CTL_ADD,sockfd,&ev);
+    return ret;
 }

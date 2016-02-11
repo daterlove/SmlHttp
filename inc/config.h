@@ -13,5 +13,7 @@
 	#define PROCESS_NUM 3
     #define MAX_BUFFER_SIZE 1024
     #define MAX_EVENTS 500
+   // #define SERVER_STRING "Server:Sml-Http\r\n"
+   #define SERVER_STRING "Server: jdbhttpd/0.1.0\r\n"
 #endif
 

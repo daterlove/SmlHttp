@@ -29,34 +29,48 @@ void request_parse_method(char *buf,int bufsize,char *method,char *url)
     }
     url[i] = '\0';
 }
-int request_handle(int client)
+int request_handle(int listenfd,int client,int epollfd)
 {
+    int ret;
     int bytes;
 	char buf[MAX_BUFFER_SIZE];
-    char method[MAX_BUFFER_SIZE];
+    char method[MAX_BUFFER_SIZE]; 
     char url[MAX_BUFFER_SIZE];
     
-    //从缓冲区读取一行
-    bytes=socket_getline(client,buf,sizeof(buf));
-    //解析命令头
-    request_parse_method(buf,bytes,method,url);
+    if(listenfd == client)//如果是监听连接
+	{
+		ret=socket_ET_accept(listenfd,epollfd);
+		if(ret<0)
+		{
+			perror("socket_ET_accept");
+		}
+	}
+	else
+	{
+        //bytes=recv(client,buf,MAX_BUFFER_SIZE,0);
+        bytes=socket_read(client,buf,MAX_BUFFER_SIZE);
+        if(bytes<0)
+        {
+            return -1;
+        }
+        else if(bytes>0)
+        {
+            request_parse_method(buf,bytes,method,url);
+            //printf("bytes:%d,收到信息buf:\n%s",bytes,buf);
+            printf("method:%s,url:%s\n\n",method,url);
+            if(!strncmp ( buf, "GET", 3 ) == 0)
+            {
+                response_unimplement_501(client);//发送给客户端501错误
+            }
+            else
+            {
+                response_notfound_404(client);
+            }
+            
+        }
+        
+	}
     
-    /*
-	bytes=recv(client,buf,MAX_BUFFER_SIZE,0);
-	if(bytes<0)
-	{
-		perror("recv err");
-		return -1;
-	}
-	if(bytes == 0)
-	{
-		printf("客户端关闭连接\n---------------\n");
-		return -2;
-	}
-    */
-	printf("收到信息buf:%s",buf);
-    printf("method:%s,url:%s\n\n",method,url);
-    close(client);
     
     return 0;
 }

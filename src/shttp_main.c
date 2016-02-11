@@ -7,6 +7,7 @@
 
 #include "common.h"
 
+
 int main(int arg,char **argv)
 {
     int ret;
@@ -41,7 +42,7 @@ int main(int arg,char **argv)
     
     printf("Server Close\n");
     */
-    int sockfd;
+    //int sockfd;
     int epollfd,fds;
     struct epoll_event ev,events[MAX_EVENTS];//epoll触发事件
     int rv;
@@ -63,26 +64,7 @@ int main(int arg,char **argv)
 		}
 		for(i=0;i<fds;i++)
 		{
-			if(events[i].data.fd == listenfd)
-			{
-				sockfd=accept(listenfd,(struct sockaddr *)&client,(socklen_t *)&len);
-				if(sockfd<0)
-				{
-					perror("accept error");
-					continue;
-				}
-                epoll_add_sockfd(epollfd,sockfd);
-				continue;
-			}
-			else
-			{
-                //处理连接请求
-				rv=request_handle(events[i].data.fd);
-				if(rv == -2)
-				{
-					epoll_ctl(epollfd,EPOLL_CTL_DEL,events[i].data.fd,&ev);
-				}
-			}
+            request_handle(listenfd,events[i].data.fd,epollfd);
 		}
 	}
         
