@@ -6,6 +6,10 @@
  ************************************************************************/
 
 #include "common.h"
+const char *g_content_type[][2]=
+{
+   {"htm","application/xml"} 
+};
 void response_head_200(int client)
 {
  char buf[1024];
@@ -45,7 +49,7 @@ void response_notfound_404(int client)
  sprintf(buf, "</BODY></HTML>\r\n");
  send(client, buf, strlen(buf), 0);
  
- printf("关闭client:%d\n",client);
+ printf("回复：404-关闭client:%d\n",client);
  close(client);
 }
 void response_unimplement_501(int client)
@@ -76,6 +80,6 @@ void response_unimplement_501(int client)
  sprintf(buf, "</BODY></HTML>\r\n");
  send(client, buf, strlen(buf), 0);
  
- printf("关闭client:%d\n",client);
+ printf("回复：501-关闭client:%d\n",client);
  close(client);
 }

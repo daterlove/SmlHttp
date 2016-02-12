@@ -144,39 +144,3 @@ int socket_read(int sock,char *buf,int bufsize)
     }
     return pos;
 }
-//从套接字缓冲区读取一行
-int socket_getline(int sock,char *buf,int size)
-{
-    int i = 0;
-    char c = '\0';
-    int n;
-
-    while ((i < size - 1) && (c != '\n'))
-    {
-        n = recv(sock, &c, 1, 0);//读取一个字符
-        if (n > 0)//读到了字符
-        {
-            if (c == '\r')
-            {
-                n = recv(sock, &c, 1, MSG_PEEK);//查看数据，不从缓冲区删除
-                if ((n > 0) && (c == '\n'))
-                {
-                    recv(sock, &c, 1, 0);
-                }
-                else
-                {
-                    c = '\n';
-                }
-     
-            }
-            buf[i] = c;
-            i++;
-        }   
-        else
-        {
-            c = '\n';
-        }
-    }
-    buf[i] = '\0';
-    return i;
-}
