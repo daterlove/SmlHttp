@@ -86,7 +86,7 @@ int request_handle(int listenfd,int client,int epollfd)
                 }       
                 
                 #ifdef DEBUG    
-                printf("GET请求：path:%s\n",path);
+               // printf("GET请求：path:%s\n",path);
                 #endif    
                 
                 response_sendfile(client,path);  

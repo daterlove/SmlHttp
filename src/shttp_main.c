@@ -13,7 +13,7 @@ int main(int arg,char **argv)
     int ret;
     
     //初始化信号处理
-    //signal_init();
+    signal_init();
     //开始监听
     int listenfd=socket_listen();
     if (listenfd<0)
