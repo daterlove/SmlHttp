@@ -6,6 +6,7 @@
  ************************************************************************/
 
 #include "common.h"
+extern const char *g_content_type[][2];
 int get_exe_dir(char *path,int size)
 {
     int count; 
@@ -69,19 +70,18 @@ int request_handle(int listenfd,int client,int epollfd)
             //解析url地址
             request_parse_url(buf,bytes,url,MAX_LINE_SIZE);
             
-            printf("\e[32m\e[1m--------------收到消息------------------------\e[0m\n");
+            printf("\e[32m\e[1m----收到消息----------------------------------\e[0m\n");
            
            // printf("url:%s\n\n",url);
-            
             if(strncmp ( buf, "GET", 3 ) == 0)
             {
+                //获取当前目录
                 char cur_dir[MAX_LINE_SIZE];
-                
-                ret=get_exe_dir(cur_dir,MAX_LINE_SIZE);//获取当前目录
+                ret=get_exe_dir(cur_dir,MAX_LINE_SIZE);
                 if(ret < 0) return -1; 
                  
+                //得出网页的本地路径
                 sprintf(path, "%s/%s%s", cur_dir,DIR_HTDOCS,url);
-                
                 if (path[strlen(path) - 1] == '/')
                 {
                     strcat(path, "index.html");//首页路径
@@ -90,38 +90,8 @@ int request_handle(int listenfd,int client,int epollfd)
                // printf("cur_dir:%s\n",cur_dir);
                 printf("GET请求：path:%s\n",path);
             #endif    
-                struct stat st;
-                 unsigned char *c;
-                 c=(unsigned char*)&path[strlen(path)-4];
-                    int j;
-                    printf("\n@@@@:%s\n",&path[strlen(path)-4]);
-                    for(j=0;j<4;j++)
-                    {
-                        printf("%d ",*c);
-                        c++;
-                    }   
-                    printf("\n");
-                if (stat(path, &st) == -1)//读取文件失败
-                {
-                    perror("stat");
-                     //printf("bytes:%d,收到信息buf:\n%s",bytes,buf);
-                     
-                   
-                    
-                    response_notfound_404(client);
-                } 
-                else
-                {
-                    printf("正确发送\n");
-                    off_t offset=0;
-                    int fd = open(path, O_RDONLY);
-                    //发送协议头
-                    response_head_200(client);
-                    //发送文件
-                    sendfile(client,fd,&offset,st.st_size);
-                    close(fd);
-                    close(client);
-                }      
+                response_sendfile(client,path);  
+      
             }
             else
             {

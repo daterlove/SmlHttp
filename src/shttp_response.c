@@ -8,9 +8,90 @@
 #include "common.h"
 const char *g_content_type[][2]=
 {
-   {"htm","application/xml"} 
+    {"html","text/html"},
+    {"htm ","text/html"},
+    {"jpg ","image/jpeg"},
+    {"jpe ","image/jpeg"},
+    {"jpeg","image/jpeg"},
+    {"png ","image/png"},
+    {"js  ","text/javascript"},
+    {"css ","text/css"},
+    {"gif ","image/gif"},
+    {"zip ","application/zip"},
+    {"txt ","text/plain"},
+    {"asc ","text/plain"},
+    {"xml ","xsl"},
+    {"dtd ","application/xml-dtd"},
+    {"xslt","application/xslt+xml"},
+    {NULL,NULL}
 };
-void response_head_200(int client)
+//将四个字节 字符串 转成 int型进行比较
+static int cmp_content_type(char *path)
+{
+    int len=strlen(path);
+    int i,j;
+    for(i=len;i>=0;i--)
+    {
+        if(path[i]  == '.') break;
+    }
+    if(i == 0) return -1;//没有找到
+    char buf[4];
+    memset(buf,0x20,4);//0x20是空格
+    //复制到缓冲区
+    for(j=0;j<len-i+1;j++)
+    {
+        buf[j]=path[++i];
+    }
+    
+    printf("#############################\n");
+    for(i=0;i<4;i++)
+    {
+        printf("%x ",buf[i]);
+    }
+    printf("\n");
+    
+    int *nType=(int *)buf;
+    i=0;
+    while(g_content_type[i][0] != NULL)
+    {
+        //printf("nType=%d,g=%d\n",*nType,*((int *)&g_content_type[i][0]) );
+        if(*((int *)g_content_type[i][0]) == *nType)//转成int型再比较
+            return i;
+        i++;
+    }
+    return -1;
+}
+void response_sendfile(int client,char *path)
+{
+    int type_index=cmp_content_type(path);
+    if(type_index < 0)
+    {
+        response_unimplement_501(client);
+        return;
+    }
+    
+    struct stat st;
+    if (stat(path, &st) == -1)//读取文件失败
+    {
+        perror("stat");
+        //printf("bytes:%d,收到信息buf:\n%s",bytes,buf);
+        response_notfound_404(client);
+    } 
+    else
+    {
+        off_t offset=0;
+        int fd = open(path, O_RDONLY);
+        //发送协议头
+        response_head_200(client,type_index);
+        //发送文件
+        sendfile(client,fd,&offset,st.st_size);
+        close(fd);
+        close(client);   
+        printf("文件-正确发送\n");                
+    }    
+     
+}
+void response_head_200(int client,int type_index)
 {
  char buf[1024];
 
@@ -18,8 +99,10 @@ void response_head_200(int client)
  send(client, buf, strlen(buf), 0);
  strcpy(buf, SERVER_STRING);
  send(client, buf, strlen(buf), 0);
- sprintf(buf, "Content-Type: text/html\r\n");
+ 
+ sprintf(buf, "Content-Type: %s\r\n",g_content_type[type_index][1]);
  send(client, buf, strlen(buf), 0);
+ printf("200:buf:%s",buf);
  strcpy(buf, "\r\n");
  send(client, buf, strlen(buf), 0);
 }
