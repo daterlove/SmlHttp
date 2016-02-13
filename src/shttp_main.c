@@ -13,7 +13,7 @@ int main(int arg,char **argv)
     int ret;
     
     //初始化信号处理
-    signal_init();
+    //signal_init();
     //开始监听
     int listenfd=socket_listen();
     if (listenfd<0)
@@ -60,7 +60,8 @@ int main(int arg,char **argv)
 		if(fds<0)
 		{
 			perror("epoll_wait err");
-			return -1;
+			//return -1;
+            continue;
 		}
 		for(i=0;i<fds;i++)
 		{

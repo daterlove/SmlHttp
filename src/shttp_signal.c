@@ -15,9 +15,9 @@ void signal_exit()
     for(i=0;i<PROCESS_NUM;i++)
     {
         printf("kill pid:%d\n",g_ProcessArr[i]);
-        kill(g_ProcessArr[i], SIGTERM); 
+      //  kill(g_ProcessArr[i], SIGTERM); 
     }
-    exit(0);  
+  //  exit(0);  
 }
 int signal_init()
 {

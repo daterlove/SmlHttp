@@ -42,14 +42,14 @@ static int cmp_content_type(char *path)
     {
         buf[j]=path[++i];
     }
-    
+    /*
     printf("#############################\n");
     for(i=0;i<4;i++)
     {
         printf("%x ",buf[i]);
     }
     printf("\n");
-    
+    */
     int *nType=(int *)buf;
     i=0;
     while(g_content_type[i][0] != NULL)
@@ -63,31 +63,50 @@ static int cmp_content_type(char *path)
 }
 void response_sendfile(int client,char *path)
 {
+    printf("response_head_200:1\n");
     int type_index=cmp_content_type(path);
     if(type_index < 0)
     {
         response_unimplement_501(client);
         return;
     }
-    
+    printf("response_head_200:2\n");
     struct stat st;
     if (stat(path, &st) == -1)//读取文件失败
     {
+        printf("response_head_200:3\n");
         perror("stat");
         //printf("bytes:%d,收到信息buf:\n%s",bytes,buf);
         response_notfound_404(client);
+        
     } 
     else
     {
+        printf("response_head_200:4\n");
         off_t offset=0;
         int fd = open(path, O_RDONLY);
+        if(fd<0)
+         {
+            perror("response-open");
+            return;
+         }
+      printf("response_head_200:5\n");
         //发送协议头
         response_head_200(client,type_index);
+      printf("response_head_200:6\n");  
         //发送文件
-        sendfile(client,fd,&offset,st.st_size);
+        int ret=sendfile(client,fd,&offset,st.st_size);;
+        if(ret<0)
+        {
+            perror("sendfie");
+        }
+      printf("response_head_200:7\n");  
         close(fd);
+      printf("response_head_200:8\n");  
         close(client);   
-        printf("文件-正确发送\n");                
+      printf("response_head_200:9\n");  
+        printf("文件-正确发送,关闭client：%d\n",client);  
+      printf("response_head_200:10\n");              
     }    
      
 }
@@ -102,7 +121,7 @@ void response_head_200(int client,int type_index)
  
  sprintf(buf, "Content-Type: %s\r\n",g_content_type[type_index][1]);
  send(client, buf, strlen(buf), 0);
- printf("200:buf:%s",buf);
+ //printf("200:buf:%s",buf);
  strcpy(buf, "\r\n");
  send(client, buf, strlen(buf), 0);
 }

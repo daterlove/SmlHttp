@@ -72,26 +72,24 @@ int request_handle(int listenfd,int client,int epollfd)
             
             printf("\e[32m\e[1m----收到消息----------------------------------\e[0m\n");
            
-           // printf("url:%s\n\n",url);
             if(strncmp ( buf, "GET", 3 ) == 0)
             {
                 //获取当前目录
                 char cur_dir[MAX_LINE_SIZE];
                 ret=get_exe_dir(cur_dir,MAX_LINE_SIZE);
                 if(ret < 0) return -1; 
-                 
                 //得出网页的本地路径
                 sprintf(path, "%s/%s%s", cur_dir,DIR_HTDOCS,url);
                 if (path[strlen(path) - 1] == '/')
                 {
                     strcat(path, "index.html");//首页路径
                 }       
-            #ifdef DEBUG    
-               // printf("cur_dir:%s\n",cur_dir);
+                
+                #ifdef DEBUG    
                 printf("GET请求：path:%s\n",path);
-            #endif    
+                #endif    
+                
                 response_sendfile(client,path);  
-      
             }
             else
             {
