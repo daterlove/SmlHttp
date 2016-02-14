@@ -107,7 +107,7 @@ int socket_ET_accept(int listenfd,int epollfd)
             return -1;
         }
         
-        printf("接受请求：infd=%d,加入epoll事件\n",infd);
+        //printf("接受请求：infd=%d,加入epoll事件\n",infd);
     }
     return 0;
 }
@@ -133,7 +133,8 @@ int socket_read(int sock,char *buf,int bufsize)
         }
         else if(count == 0)// 被客户端关闭连接
         {
-            printf("关闭客户端连接,sock=%d\n",sock);
+           // printf("客户端连接,sock=%d\n",sock);
+            log_success(sock,"客户端关闭连接");
             close(sock);
             return 0;
         }

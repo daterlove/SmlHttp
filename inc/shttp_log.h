@@ -8,5 +8,8 @@
 #ifndef _SHTTP_LOG_H_
 #define _SHTTP_LOG_H_
 
-	
+	void log_output_client(int client,char *method,char *url);
+    void log_error(int client,char *msg);
+    void log_success(int client,char *msg);
+    void log_start(int listenfd);
 #endif

@@ -20,8 +20,7 @@ int main(int arg,char **argv)
     {
         return -1;
     }
-	printf("listenfd:%d\n",listenfd);
-    
+    log_start(listenfd);
     /*
     //创建子进程
     ret=process_CreateSub();

@@ -70,7 +70,7 @@ int request_handle(int listenfd,int client,int epollfd)
             //解析url地址
             request_parse_url(buf,bytes,url,MAX_LINE_SIZE);
             
-            printf("\e[32m\e[1m----收到消息----------------------------------\e[0m\n");
+           // printf("\e[32m\e[1m----收到消息----------------------------------\e[0m\n");
            
             if(strncmp ( buf, "GET", 3 ) == 0)
             {
@@ -87,8 +87,8 @@ int request_handle(int listenfd,int client,int epollfd)
                 
                 #ifdef DEBUG    
                // printf("GET请求：path:%s\n",path);
-                #endif    
-                
+               log_output_client(client,"GET",url);
+                #endif   
                 response_sendfile(client,path);  
             }
             else

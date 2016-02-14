@@ -12,6 +12,7 @@
 #include <limits.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <time.h>   
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/epoll.h>
@@ -29,6 +30,7 @@
 #include "shttp_epoll.h"
 #include "shttp_request.h"
 #include "shttp_response.h"
+#include "shttp_log.h"
 
 #endif
 

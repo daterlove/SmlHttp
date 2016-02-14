@@ -64,48 +64,36 @@ static int cmp_content_type(char *path)
 }
 void response_sendfile(int client,char *path)
 {
-    //printf("response_head_200:1\n");
+
     int type_index=cmp_content_type(path);
     if(type_index < 0)
     {
         response_unimplement_501(client);
         return;
     }
-    //printf("response_head_200:2\n");
+
     struct stat st;
     if (stat(path, &st) == -1)//读取文件失败
     {
-        printf("response_head_200:3\n");
-        perror("stat");
-        //printf("bytes:%d,收到信息buf:\n%s",bytes,buf);
         response_notfound_404(client);
-        
     } 
     else
     {
-        //printf("response_head_200:4\n");
         off_t offset=0;
         int fd = open(path, O_RDONLY);
         if(fd<0)
-         {
-            perror("response-open");
-            return;
-         }
-      //printf("response_head_200:5\n");
+        {
+           perror("response-open");
+           return;
+        }
         //发送协议头
         response_head_200(client,type_index);
-      //printf("response_head_200:6\n");  
-        //发送文件
-      printf("g_count:%d,client:%d,fd:%d,st_size:%d\n",g_count++,client,fd,st.st_size);
-        int sendsize=sendfile(client,fd,&offset,st.st_size);
-      printf("sendsize:%d,errno:%d,EAGAIN:%d\n",sendsize,errno,EAGAIN);
-     // printf("response_head_200:7\n");  
+        sendfile(client,fd,&offset,st.st_size);
+        close(fd);
+        close(client);   
         
-      //printf("response_head_200:8\n");  
-        close(client);   close(fd);
-      //printf("response_head_200:9\n");  
-        printf("文件-正确发送,关闭client：%d\n",client);  
-      //printf("response_head_200:10\n");              
+       // printf("文件-正确发送,关闭client：%d\n",client);   
+        log_success(client,"文件成功发送");          
     }    
      
 }
@@ -117,7 +105,6 @@ void response_head_200(int client,int type_index)
  send(client, buf, strlen(buf), 0);
  strcpy(buf, SERVER_STRING);
  send(client, buf, strlen(buf), 0);
- 
  sprintf(buf, "Content-Type: %s\r\n",g_content_type[type_index][1]);
  send(client, buf, strlen(buf), 0);
  //printf("200:buf:%s",buf);
@@ -150,7 +137,7 @@ void response_notfound_404(int client)
  sprintf(buf, "</BODY></HTML>\r\n");
  send(client, buf, strlen(buf), 0);
  
- printf("回复：404-关闭client:%d\n",client);
+ log_error(client,"404错误-文件不存在");
  close(client);
 }
 void response_unimplement_501(int client)
@@ -159,28 +146,21 @@ void response_unimplement_501(int client)
 
  sprintf(buf, "HTTP/1.0 501 Method Not Implemented\r\n");
  send(client, buf, strlen(buf), 0);
- 
  sprintf(buf, SERVER_STRING);
  send(client, buf, strlen(buf), 0);
- 
  sprintf(buf, "Content-Type: text/html\r\n");
  send(client, buf, strlen(buf), 0);
- 
  sprintf(buf, "\r\n");
  send(client, buf, strlen(buf), 0);
- 
  sprintf(buf, "<HTML><HEAD><TITLE>Method Not Implemented\r\n");
  send(client, buf, strlen(buf), 0);
- 
  sprintf(buf, "</TITLE></HEAD>\r\n");
  send(client, buf, strlen(buf), 0);
- 
  sprintf(buf, "<BODY><P>HTTP request method not supported.\r\n");
  send(client, buf, strlen(buf), 0);
- 
  sprintf(buf, "</BODY></HTML>\r\n");
  send(client, buf, strlen(buf), 0);
  
- printf("回复：501-关闭client:%d\n",client);
+ log_error(client,"501错误-尚未支持该请求");
  close(client);
 }
