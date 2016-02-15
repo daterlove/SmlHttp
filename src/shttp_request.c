@@ -10,10 +10,18 @@ extern const char *g_content_type[][2];
 int judge_url_type(char *url)
 {
     int i;
-    for(i=strlen(url) - 1;i>=0;i--)
+    int len=strlen(url) - 1;
+    for(i=len;i>=0;i--)
     {
-        if(url[i] == '/') return 0;
-        if(url[i] == '.') return 1;
+        if(url[i] == '/') 
+        {
+            if(i == len)//顶层目录
+                return 0;
+            else        //二级目录
+                return 1;
+        }
+        if(url[i] == '.')//文件
+            return 2;
     }
     return -1;
 }
@@ -93,7 +101,11 @@ int request_handle(int listenfd,int client,int epollfd)
                 if (ret == 0)//是目录
                 {
                     strcat(path, "index.html");//首页路径
-                }     
+                }
+                else if (ret == 1)//是目录
+                {
+                    strcat(path, "/index.html");//首页路径
+                }       
                 
                 #ifdef DEBUG    
                // printf("GET请求：path:%s\n",path);
