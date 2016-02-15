@@ -9,6 +9,7 @@
 
 //创建绑定套接字
 //失败返回-1，成功返回监听套接字
+int maxfd;
 int socket_listen()
 {
     struct sockaddr_in server_addr;
@@ -106,7 +107,7 @@ int socket_ET_accept(int listenfd,int epollfd)
             perror("epoll_add_sockfd error");
             return -1;
         }
-        
+        if(infd>maxfd) maxfd=infd;
         //printf("接受请求：infd=%d,加入epoll事件\n",infd);
     }
     return 0;

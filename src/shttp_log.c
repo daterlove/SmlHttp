@@ -6,6 +6,7 @@
  ************************************************************************/
 
 #include "common.h"
+extern int maxfd;
 //格式化时间 输出到buf
 void format_time(char *time_buf)
 {
@@ -30,26 +31,39 @@ void format_client(int client,char *client_buf)
        client_buf[0]='\0';
     }
 }
+
+void format_color_out(int text_color,int bracket_color,char *str)
+{
+    printf("\e[%dm\e[1m%s\e[0m ",bracket_color,"[");
+    printf("\e[%dm\e[1m%s\e[0m ",text_color,str);
+    printf("\e[%dm\e[1m%s\e[0m\n\n",bracket_color,"]");
+}
 void log_output_client(int client,char *method,char *url)
 {
     char time_buf[256];
     char client_buf[256];
+
     format_time(time_buf);
     format_client(client,client_buf);
     printf("\e[35m\e[1m%s\e[0m ","[收到请求]:");
     printf("\e[34m\e[1m[%s]\e[0m ",time_buf);
     printf("\e[34m\e[1m[%s client:%d]\e[0m\n",client_buf,client);
     printf("\e[36m\e[1m[请求方法:%s  URL:%s]\e[0m\n",method,url);
+ 
 }
 
 void log_error(int client,char *msg)
 {
-    printf("\e[31m\e[1m[解析失败:%s client:%d]\e[0m\n\n",msg,client);
+    //char buf[100];
+    printf("\e[31m\e[1m[请求失败:%s client:%d]\e[0m\n\n",msg,client);
+    //sprintf(buf,"请求失败:%s client:%d",msg,client);
+    //format_color_out(31,33,buf);
 }
 
 void log_success(int client,char *msg)
 {
-    printf("\e[33m\e[1m[成功操作:%s client:%d]\e[0m\n\n",msg,client);
+    printf("\e[33m\e[1m[操作成功:%s client:%d]\e[0m\n\n",msg,client);
+    //printf("\e[33m\e[1m[成功操作:%s client:%d]\e[0m\nmaxfd:%d\n",msg,client,maxfd);
 }
 
 void log_start(int listenfd)

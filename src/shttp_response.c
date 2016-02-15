@@ -18,12 +18,15 @@ const char *g_content_type[][2]=
     {"js  ","text/javascript"},
     {"css ","text/css"},
     {"gif ","image/gif"},
+    {"ico ","image/x-icon"},
     {"zip ","application/zip"},
     {"txt ","text/plain"},
     {"asc ","text/plain"},
     {"xml ","xsl"},
     {"dtd ","application/xml-dtd"},
     {"xslt","application/xslt+xml"},
+    {"bmp ","application/x-bmp"},
+    {"doc ","application/msword"},
     {NULL,NULL}
 };
 //将四个字节 字符串 转成 int型进行比较
