@@ -7,6 +7,16 @@
 
 #include "common.h"
 extern const char *g_content_type[][2];
+int judge_url_type(char *url)
+{
+    int i;
+    for(i=strlen(url) - 1;i>=0;i--)
+    {
+        if(url[i] == '/') return 0;
+        if(url[i] == '.') return 1;
+    }
+    return -1;
+}
 int get_exe_dir(char *path,int size)
 {
     int count; 
@@ -69,7 +79,6 @@ int request_handle(int listenfd,int client,int epollfd)
         {
             //解析url地址
             request_parse_url(buf,bytes,url,MAX_LINE_SIZE);
-            
            // printf("\e[32m\e[1m----收到消息----------------------------------\e[0m\n");
            
             if(strncmp ( buf, "GET", 3 ) == 0)
@@ -80,10 +89,11 @@ int request_handle(int listenfd,int client,int epollfd)
                 if(ret < 0) return -1; 
                 //得出网页的本地路径
                 sprintf(path, "%s/%s%s", cur_dir,DIR_HTDOCS,url);
-                if (path[strlen(path) - 1] == '/')
+                ret=judge_url_type(url);
+                if (ret == 0)//是目录
                 {
                     strcat(path, "index.html");//首页路径
-                }       
+                }     
                 
                 #ifdef DEBUG    
                // printf("GET请求：path:%s\n",path);
