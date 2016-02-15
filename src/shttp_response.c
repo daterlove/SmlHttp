@@ -126,20 +126,23 @@ void response_notfound_404(int client)
  send(client, buf, strlen(buf), 0);
  sprintf(buf, "\r\n");
  send(client, buf, strlen(buf), 0);
- sprintf(buf, "<HTML><TITLE>Not Found</TITLE>\r\n");
+ 
+ sprintf(buf, "<html><head><title>Not Found</title></head>");
  send(client, buf, strlen(buf), 0);
  //指定网页编码
- sprintf(buf, "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /> ");
+ sprintf(buf, "<meta charset=utf-8 />");
  send(client, buf, strlen(buf), 0);
- sprintf(buf, "<BODY><P>文件找不到The server could not fulfill\r\n");
+ sprintf(buf, "<style>body{text-align:center}</style>");
  send(client, buf, strlen(buf), 0);
- sprintf(buf, "your request because the resource specified\r\n");
+ sprintf(buf, "<body text-align:center><h1>404 Not Found</h1>唔……你犯了一个404错误！");
  send(client, buf, strlen(buf), 0);
- sprintf(buf, "is unavailable or nonexistent.\r\n");
+ sprintf(buf, "<p /><hr /><small>");
  send(client, buf, strlen(buf), 0);
- sprintf(buf, "</BODY></HTML>\r\n");
+ sprintf(buf, "Server:Sml-Http Author:DaterLove</small>");
  send(client, buf, strlen(buf), 0);
- 
+ sprintf(buf, "</body></html>");
+ send(client, buf, strlen(buf), 0);
+
  log_error(client,"404错误-文件不存在");
  close(client);
 }
