@@ -26,6 +26,11 @@ int main(int arg,char **argv)
     
     //创建进程锁
     shttp_lock=shttp_spinlock_create(sizeof(struct shttp_spinlock_t));
+    if(shttp_lock == -1)
+    {
+        perror("分配共享内存错误，程序退出");
+        return -1;
+    }
     
     //创建子进程
     ret=process_CreateSub();
