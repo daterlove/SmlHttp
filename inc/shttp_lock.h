@@ -1,11 +1,12 @@
 /*************************************************************************
-    > File Name: shttp_mutex.h
+    > File Name: shttp_lock.h
     > Author: 浅握双手
     > ---------------- 
-    > Created Time: 2016年02月04日 15时31分14秒 CST
+    > Created Time: 2016年02月20日 20时19分09秒 CST
  ************************************************************************/
 
-#ifndef _SHTTP_MUTEX_H_
-#define _SHTTP_MUTEX_H_
+#ifndef _SHTTP_LOCK_H_
+#define _SHTTP_LOCK_H_
 
 #endif
+

@@ -104,7 +104,7 @@ int request_handle(int listenfd,int client,int epollfd)
                 }
                 else if (ret == 1)//是目录
                 {
-                    strcat(path, "/index.html");//首页路径
+                    strcat(path, "/index.html");//二级目录路径
                 }       
                 
                 #ifdef DEBUG    
