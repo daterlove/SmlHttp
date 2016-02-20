@@ -56,6 +56,7 @@ int socket_listen()
 	fcntl(listenfd,F_SETFL,O_NONBLOCK);
     return listenfd;
 }
+
 int socket_setarg(int socket)
 {
     //TCP_CORK：采用Nagle算法把较小的包组装为更大的帧
@@ -66,6 +67,7 @@ int socket_setarg(int socket)
     
     return ret;
 }
+
 // 在ET模式下必须循环accept到返回-1为止,并加入epoll事件
 int socket_ET_accept(int listenfd,int epollfd)
 {

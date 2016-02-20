@@ -42,10 +42,10 @@ void log_output_client(int client,char *method,char *url)
 {
     char time_buf[256];
     char client_buf[256];
-
     format_time(time_buf);
     format_client(client,client_buf);
-    printf("\e[35m\e[1m%s\e[0m ","[收到请求]:");
+
+    printf("\e[35m\e[1m[PID:%d-%s]\e[0m ",getpid(),"收到请求:");
     printf("\e[34m\e[1m[%s]\e[0m ",time_buf);
     printf("\e[34m\e[1m[%s client:%d]\e[0m\n",client_buf,client);
     printf("\e[36m\e[1m[请求方法:%s  URL:%s]\e[0m\n",method,url);

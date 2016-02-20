@@ -7,6 +7,8 @@
 
 #include "common.h"
 
+//进程锁
+struct shttp_spinlock_t *shttp_lock;
 
 int main(int arg,char **argv)
 {
@@ -21,33 +23,29 @@ int main(int arg,char **argv)
         return -1;
     }
     log_start(listenfd);
-    /*
+    
+    //创建进程锁
+    shttp_lock=shttp_spinlock_create(sizeof(struct shttp_spinlock_t));
+    
     //创建子进程
     ret=process_CreateSub();
-    if(0==ret)//父进程
+    if(0==ret)
     {
         pause();
-        printf("parent process\n");
-        
+        printf("master进程-pid:%d\n",getpid());
     }
-    else if(1==ret)//子进程
+    else if(1==ret)
     {
-        printf("sub process\n");
+        printf("worker子进程启动-pid:%d\n",getpid());
     }
     else//发生错误
     {
         return -1;
     }
     
-    printf("Server Close\n");
-    */
-    //int sockfd;
+ //--------子进程执行内容------------------------------- 
     int epollfd,fds;
     struct epoll_event events[MAX_EVENTS];//epoll触发事件
-  //  int rv;
-	//struct sockaddr_in client;//客户端地址
-	//int len=sizeof(struct sockaddr_in);
-    
     //创建epoll句柄,并加入监听套接字
     epollfd=epoll_init(listenfd);
   
@@ -56,10 +54,10 @@ int main(int arg,char **argv)
 	{
 		//通常需要超时处理
 		fds=epoll_wait(epollfd,events,MAX_EVENTS,-1);
+       // printf("收到数据-pid:%d\n",getpid());
 		if(fds<0)
 		{
 			perror("epoll_wait err");
-			//return -1;
             continue;
 		}
 		for(i=0;i<fds;i++)

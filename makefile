@@ -11,10 +11,10 @@ OBJ = $(patsubst %.c,${DIR_OBJ}/%.o,$(notdir ${SRC}))
 BIN_TARGET = ${DIR_BIN}/${TARGET}
 
 
-CFLAGS = -g -Wall -I${DIR_INC}
+CFLAGS = -g -Wall  -I${DIR_INC} -pthread
 
 ${BIN_TARGET}:${OBJ}
-	$(CC) $(OBJ)  -o $@
+	$(CC) $(OBJ) -pthread -o $@
     
 ${DIR_OBJ}/%.o:${DIR_SRC}/%.c
 	$(CC) $(CFLAGS) -c  $< -o $@

@@ -8,7 +8,7 @@
 
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
-    #define DEBUG 1
+   #define DEBUG
     
 	#define LISTEN_PORT 8888       //监听端口
 	#define MAX_LISTEN 100         //最大监听数

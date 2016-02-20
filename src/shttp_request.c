@@ -7,6 +7,8 @@
 
 #include "common.h"
 extern const char *g_content_type[][2];
+extern struct shttp_spinlock_t *shttp_lock;
+
 int judge_url_type(char *url)
 {
     int i;
@@ -69,7 +71,25 @@ int request_handle(int listenfd,int client,int epollfd)
     
     if(listenfd == client)//如果是监听连接
 	{
-		ret=socket_ET_accept(listenfd,epollfd);
+        //获取进程锁
+        int lock_ret=shttp_getlock(shttp_lock,getpid());
+        if( lock_ret== 0)
+        {
+		    ret=socket_ET_accept(listenfd,epollfd);
+            shttp_unlock(shttp_lock);//释放锁
+            #ifdef DEBUG
+            printf("监听请求，成功获取锁,PID:%d\n",getpid());
+            #endif
+        }
+        else
+        {
+            /*
+            #ifdef DEBUG
+            printf("----没有获取到锁，PID：%d\n",getpid());
+            #endif*/
+            return 0;
+        }
+        
 		if(ret<0)
 		{
 			perror("socket_ET_accept");
@@ -107,10 +127,9 @@ int request_handle(int listenfd,int client,int epollfd)
                     strcat(path, "/index.html");//二级目录路径
                 }       
                 
-                #ifdef DEBUG    
-               // printf("GET请求：path:%s\n",path);
+               #ifdef DEBUG    
                log_output_client(client,"GET",url);
-                #endif   
+               #endif   
                 response_sendfile(client,path);  
             }
             else

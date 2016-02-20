@@ -46,14 +46,7 @@ static int cmp_content_type(char *path)
     {
         buf[j]=path[++i];
     }
-    /*
-    printf("#############################\n");
-    for(i=0;i<4;i++)
-    {
-        printf("%x ",buf[i]);
-    }
-    printf("\n");
-    */
+
     int *nType=(int *)buf;
     i=0;
     while(g_content_type[i][0] != NULL)
@@ -95,8 +88,9 @@ void response_sendfile(int client,char *path)
         close(fd);
         close(client);   
         
-       // printf("文件-正确发送,关闭client：%d\n",client);   
-        log_success(client,"文件成功发送");          
+        #ifdef DEBUG  
+        log_success(client,"文件成功发送");
+        #endif         
     }    
      
 }
@@ -143,7 +137,9 @@ void response_notfound_404(int client)
  sprintf(buf, "</body></html>");
  send(client, buf, strlen(buf), 0);
 
+ #ifdef DEBUG         
  log_error(client,"404错误-文件不存在");
+ #endif 
  close(client);
 }
 void response_unimplement_501(int client)

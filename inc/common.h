@@ -20,6 +20,7 @@
 #include <sys/socket.h>
 #include <sys/sendfile.h>
 #include <arpa/inet.h>
+#include <sys/mman.h> 
 #include <netinet/in.h>
 #include <netinet/tcp.h>
 
@@ -31,6 +32,7 @@
 #include "shttp_request.h"
 #include "shttp_response.h"
 #include "shttp_log.h"
+#include "shttp_lock.h"
 
 #endif
 
