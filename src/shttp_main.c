@@ -26,7 +26,7 @@ int main(int arg,char **argv)
     
     //创建进程锁
     shttp_lock=shttp_spinlock_create(sizeof(struct shttp_spinlock_t));
-    if(shttp_lock == -1)
+    if(shttp_lock == (struct shttp_spinlock_t *)-1)
     {
         perror("分配共享内存错误，程序退出");
         return -1;
@@ -41,7 +41,8 @@ int main(int arg,char **argv)
     }
     else if(1==ret)
     {
-        printf("worker子进程启动-pid:%d\n",getpid());
+       // printf("\e[34m\e[1m[%s]\e[0m ",time_buf);
+        printf("\e[34m\e[1mworker子进程启动-pid:%d \e[0m\n",getpid());
     }
     else//发生错误
     {

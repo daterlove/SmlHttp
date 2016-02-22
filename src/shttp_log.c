@@ -54,10 +54,7 @@ void log_output_client(int client,char *method,char *url)
 
 void log_error(int client,char *msg)
 {
-    //char buf[100];
     printf("\e[31m\e[1m[请求失败:%s client:%d]\e[0m\n\n",msg,client);
-    //sprintf(buf,"请求失败:%s client:%d",msg,client);
-    //format_color_out(31,33,buf);
 }
 
 void log_success(int client,char *msg)
@@ -82,5 +79,5 @@ void log_start(int listenfd)
     char server_buf[344];
     sprintf(server_buf,"http//:%s:%d/",inet_ntoa(sa.sin_addr),ntohs(sa.sin_port));
     printf("\e[31m\e[1m%s\e[0m\n","Sml-Http 服务器端启动");
-    printf("\e[33m\e[1m[访问地址:%s]\e[0m\n\n",server_buf);
+    printf("\e[33m\e[1m[访问地址:%s]\e[0m\n",server_buf);
 }
