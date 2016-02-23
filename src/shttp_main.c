@@ -7,8 +7,9 @@
 
 #include "common.h"
 
-//进程锁
-struct shttp_spinlock_t *shttp_lock;
+
+struct shttp_spinlock_t *shttp_lock;//进程锁
+int g_connect_count;//进程连接数
 
 int main(int arg,char **argv)
 {

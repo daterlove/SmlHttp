@@ -19,5 +19,7 @@
     //服务器信息字符串
     #define SERVER_STRING "Server:Sml-Http\r\n"
     #define DIR_HTDOCS "htdocs"    //网站目录
+    
+    #define MAX_CONNECTIONS 1024   //单进程最大连接数
 #endif
 

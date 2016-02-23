@@ -6,7 +6,7 @@
  ************************************************************************/
 
 #include "common.h"
-int g_count;
+
 const char *g_content_type[][2]=
 {
     {"html","text/html"},

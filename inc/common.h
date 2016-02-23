@@ -12,14 +12,15 @@
 #include <limits.h>
 #include <pthread.h>
 #include <unistd.h>
-#include <time.h>   
+#include <time.h> 
+#include <arpa/inet.h>  
+#include <sys/time.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/epoll.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/sendfile.h>
-#include <arpa/inet.h>
 #include <sys/mman.h> 
 #include <netinet/in.h>
 #include <netinet/tcp.h>
@@ -33,6 +34,6 @@
 #include "shttp_response.h"
 #include "shttp_log.h"
 #include "shttp_lock.h"
-
+#include "shttp_timer.h"
 #endif
 
