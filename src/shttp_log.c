@@ -6,7 +6,8 @@
  ************************************************************************/
 
 #include "common.h"
-extern int maxfd;
+
+extern int g_connect_count;
 //格式化时间 输出到buf
 void format_time(char *time_buf)
 {
@@ -61,6 +62,7 @@ void log_success(int client,char *msg)
 {
     printf("\e[33m\e[1m[操作成功:%s client:%d]\e[0m\n\n",msg,client);
     //printf("\e[33m\e[1m[成功操作:%s client:%d]\e[0m\nmaxfd:%d\n",msg,client,maxfd);
+    printf("PID:%d---并发数：%d\n",getpid(),g_connect_count);
 }
 
 void log_start(int listenfd)

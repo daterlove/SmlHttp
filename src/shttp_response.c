@@ -6,7 +6,7 @@
  ************************************************************************/
 
 #include "common.h"
-
+extern int g_connect_count;
 const char *g_content_type[][2]=
 {
     {"html","text/html"},
@@ -87,6 +87,7 @@ void response_sendfile(int client,char *path)
         sendfile(client,fd,&offset,st.st_size);
         close(fd);
         close(client);   
+        g_connect_count--;//全局连接数 减一
         
         #ifdef DEBUG  
         log_success(client,"文件成功发送");
@@ -141,6 +142,7 @@ void response_notfound_404(int client)
  log_error(client,"404错误-文件不存在");
  #endif 
  close(client);
+ g_connect_count--;//全局连接数 减一
 }
 void response_unimplement_501(int client)
 {
@@ -165,4 +167,5 @@ void response_unimplement_501(int client)
  
  log_error(client,"501错误-尚未支持该请求");
  close(client);
+ g_connect_count--;//全局连接数 减一
 }

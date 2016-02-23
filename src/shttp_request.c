@@ -69,6 +69,7 @@ int request_handle(int listenfd,int client,int epollfd)
     char url[MAX_LINE_SIZE];
     char path[MAX_LINE_SIZE];
     
+    
     if(listenfd == client)//如果是监听连接
 	{
         //获取进程锁

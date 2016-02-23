@@ -9,6 +9,7 @@
 
 //创建绑定套接字
 //失败返回-1，成功返回监听套接字
+extern int g_connect_count;
 int maxfd;
 int socket_listen()
 {
@@ -109,7 +110,11 @@ int socket_ET_accept(int listenfd,int epollfd)
             perror("epoll_add_sockfd error");
             return -1;
         }
-        if(infd>maxfd) maxfd=infd;
+        else
+        {
+            g_connect_count++;//全局连接数 加一
+        }
+   
         //printf("接受请求：infd=%d,加入epoll事件\n",infd);
     }
     return 0;
@@ -139,6 +144,7 @@ int socket_read(int sock,char *buf,int bufsize)
            // printf("客户端连接,sock=%d\n",sock);
             log_success(sock,"客户端关闭连接");
             close(sock);
+            g_connect_count--;//全局连接数 减一
             return 0;
         }
         else if(count >0 )

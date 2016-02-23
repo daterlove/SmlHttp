@@ -10,7 +10,7 @@
 
 struct shttp_spinlock_t *shttp_lock;//进程锁
 int g_connect_count;//进程连接数
-
+int g_maxfd;        //监听的最大套接字fd[记录用]
 int main(int arg,char **argv)
 {
     int ret;
@@ -29,7 +29,7 @@ int main(int arg,char **argv)
     shttp_lock=shttp_spinlock_create(sizeof(struct shttp_spinlock_t));
     if(shttp_lock == (struct shttp_spinlock_t *)-1)
     {
-        perror("分配共享内存错误，程序退出");
+        perror("进程锁分配共享内存错误，程序退出");
         return -1;
     }
     

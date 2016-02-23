@@ -8,7 +8,9 @@
 #include "common.h"
 void sleep_over(int signum)
 {
+    #ifdef DEBUG  
     printf("Sleep over\n");
+    #endif 
     return;
 }
 //设置秒和微秒后，阻塞程序
