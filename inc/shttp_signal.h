@@ -7,7 +7,9 @@
 
 #ifndef _SHTTP_SIGNAL_H_
 #define _SHTTP_SIGNAL_H_
-
     void signal_exit();
     int signal_init();
+    void signal_record();
+    void signal_alarm_handlde(int signum);
+    void signal_record_handlde(int signum);
 #endif

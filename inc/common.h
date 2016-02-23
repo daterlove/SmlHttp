@@ -35,5 +35,7 @@
 #include "shttp_log.h"
 #include "shttp_lock.h"
 #include "shttp_timer.h"
+#include "shttp_file.h"
+#include "shttp_string.h"
 #endif
 

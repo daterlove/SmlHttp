@@ -9,4 +9,5 @@
 #define _SHTTP_TIMER_H_
 
 	void timer_sleep(int sec,int usec);
+    void timer_record_log(int sec);
 #endif

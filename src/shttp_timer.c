@@ -25,3 +25,15 @@ void timer_sleep(int sec,int usec)
    setitimer(ITIMER_REAL, &value, &ovalue); //(2)
    pause(); 
 }
+
+void timer_record_log(int sec)
+{
+    char time_buf[256];
+    char file_buf[256];
+    alarm(sec);
+    format_time(time_buf);
+    sprintf(file_buf,"\n[时间：%s]\n",time_buf);
+    file_write(LOG_NAME,file_buf);
+    pause();
+    signal_record(); 
+}

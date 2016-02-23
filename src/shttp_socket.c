@@ -10,7 +10,7 @@
 //创建绑定套接字
 //失败返回-1，成功返回监听套接字
 extern int g_connect_count;
-int maxfd;
+extern int g_maxfd;
 int socket_listen()
 {
     struct sockaddr_in server_addr;
@@ -61,7 +61,7 @@ int socket_listen()
 int socket_setarg(int socket)
 {
     //TCP_CORK：采用Nagle算法把较小的包组装为更大的帧
-     int on = 1;
+    int on = 1;
     setsockopt (socket, SOL_TCP, TCP_CORK, &on, sizeof ( on ) );
     //设置非阻塞
     int ret=fcntl(socket,F_SETFL,O_NONBLOCK);
@@ -114,7 +114,8 @@ int socket_ET_accept(int listenfd,int epollfd)
         {
             g_connect_count++;//全局连接数 加一
         }
-   
+        if(infd > g_maxfd) //记录最大fd
+            g_maxfd=infd;
         //printf("接受请求：infd=%d,加入epoll事件\n",infd);
     }
     return 0;

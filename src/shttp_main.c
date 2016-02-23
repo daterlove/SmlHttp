@@ -7,16 +7,18 @@
 
 #include "common.h"
 
-
 struct shttp_spinlock_t *shttp_lock;//进程锁
 int g_connect_count;//进程连接数
 int g_maxfd;        //监听的最大套接字fd[记录用]
-int main(int arg,char **argv)
+
+int main(int argc,char **argv)
 {
+    int recordnum=-1;
+    string_get_argments(argc,argv,&recordnum);
+    printf("recordnum:%d\n",recordnum);
     int ret;
     
-    //初始化信号处理
-    signal_init();
+    
     //开始监听
     int listenfd=socket_listen();
     if (listenfd<0)
@@ -35,14 +37,35 @@ int main(int arg,char **argv)
     
     //创建子进程
     ret=process_CreateSub();
-    if(0==ret)
+    if(0==ret)//父进程
     {
+        signal(SIGALRM,&signal_alarm_handlde);
+        if(recordnum < 0)
+        {
+            pause();
+        }
+        else if (recordnum > 0)
+        {
+            int i;
+
+            for(i=0;i<recordnum;i++)
+            {
+                timer_record_log(3);
+            }
+        }
+        else
+        {
+            for(;;)
+            {
+                timer_record_log(3); 
+            } 
+        }
         pause();
-        printf("master进程-pid:%d\n",getpid());
     }
-    else if(1==ret)
+    else if(1==ret)//子进程
     {
-       // printf("\e[34m\e[1m[%s]\e[0m ",time_buf);
+        //初始化信号处理
+        signal_init();
         printf("\e[34m\e[1mworker子进程启动-pid:%d \e[0m\n",getpid());
     }
     else//发生错误
@@ -64,6 +87,8 @@ int main(int arg,char **argv)
        // printf("收到数据-pid:%d\n",getpid());
 		if(fds<0)
 		{
+            if(errno == EINTR)//高级别中断
+                continue;
 			perror("epoll_wait err");
             continue;
 		}
