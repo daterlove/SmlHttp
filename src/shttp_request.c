@@ -8,6 +8,7 @@
 #include "common.h"
 extern const char *g_content_type[][2];
 extern struct shttp_spinlock_t *shttp_lock;
+extern int g_connect_count;
 
 int judge_url_type(char *url)
 {
@@ -72,6 +73,23 @@ int request_handle(int listenfd,int client,int epollfd)
     
     if(listenfd == client)//如果是监听连接
 	{
+        //---进程负载语句块
+        printf("g_connect_count:%d\n",g_connect_count);
+        if(g_connect_count >MAX_CONNECTIONS)
+        {
+            #ifdef BLANCE_DEBUG
+            printf("超过最大连接数，放弃连接\n");
+            #endif
+            return 1;
+        }
+        else if(g_connect_count > (MAX_CONNECTIONS* 7/8))
+        {
+            #ifdef BLANCE_DEBUG
+            printf("超过连接总数7/8\n");
+            #endif
+            volatile int i=1;//多做一点操作方便其他进程有更多机会
+            i--;
+        }
         //获取进程锁
         int lock_ret=shttp_getlock(shttp_lock,getpid());
         if( lock_ret== 0)

@@ -8,7 +8,8 @@
 
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
-   #define DEBUG
+    #define DEBUG
+    //#define BLANCE_DEBUG
     
 	#define LISTEN_PORT 8888       //监听端口
 	#define MAX_LISTEN 100         //最大监听数
@@ -20,6 +21,6 @@
     #define SERVER_STRING "Server:Sml-Http\r\n"
     #define DIR_HTDOCS "htdocs"    //网站目录
     #define LOG_NAME "record_log"   //日志文件名   
-    #define MAX_CONNECTIONS 1024   //单进程最大连接数
+    #define MAX_CONNECTIONS 20   //单进程最大连接数
 #endif
 

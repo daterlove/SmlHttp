@@ -142,8 +142,9 @@ int socket_read(int sock,char *buf,int bufsize)
         }
         else if(count == 0)// 被客户端关闭连接
         {
-           // printf("客户端连接,sock=%d\n",sock);
+            #ifdef DEBUG
             log_success(sock,"客户端关闭连接");
+            #endif
             close(sock);
             g_connect_count--;//全局连接数 减一
             return 0;
