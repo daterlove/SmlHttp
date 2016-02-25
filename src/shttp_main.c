@@ -16,10 +16,9 @@ int main(int argc,char **argv)
 {
     int recordnum=-1;
     string_get_argments(argc,argv,&recordnum);
-    printf("recordnum:%d\n",recordnum);
+    //printf("recordnum:%d\n",recordnum);
     int ret;
-    
-    
+
     //开始监听
     int listenfd=socket_listen();
     if (listenfd<0)
@@ -67,7 +66,7 @@ int main(int argc,char **argv)
     {
         //初始化信号处理
         signal_init();
-        printf("\e[34m\e[1mworker子进程启动-pid:%d \e[0m\n",getpid());
+        printf("\e[34m\e[1mworker子进程启动-PID:%d \e[0m\n",getpid());
     }
     else//发生错误
     {

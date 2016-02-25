@@ -74,7 +74,9 @@ int request_handle(int listenfd,int client,int epollfd)
     if(listenfd == client)//如果是监听连接
 	{
         //---进程负载语句块
+        #ifdef BLANCE_DEBUG
         printf("g_connect_count:%d\n",g_connect_count);
+        #endif
         if(g_connect_count >MAX_CONNECTIONS)
         {
             #ifdef BLANCE_DEBUG

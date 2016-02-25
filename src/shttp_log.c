@@ -80,6 +80,6 @@ void log_start(int listenfd)
     
     char server_buf[344];
     sprintf(server_buf,"http//:%s:%d/",inet_ntoa(sa.sin_addr),ntohs(sa.sin_port));
-    printf("\e[31m\e[1m%s\e[0m\n","Sml-Http 服务器端启动");
+    printf("\e[31m\e[1m%s\e[0m\n","Sml-Http服务器端启动 [-h 显示帮助]");
     printf("\e[33m\e[1m[访问地址:%s]\e[0m\n",server_buf);
 }
