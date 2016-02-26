@@ -10,4 +10,5 @@
 
     void request_parse_url(char *buf,int bufsize,char *url,int linesize);
     int request_handle(int listenfd,int client,int epollfd);
+    void init_exe_dir();
 #endif

@@ -9,6 +9,7 @@
 extern const char *g_content_type[][2];
 extern struct shttp_spinlock_t *shttp_lock;
 extern int g_connect_count;
+char g_cur_exe_dir[MAX_LINE_SIZE];//当前程序目录
 
 int judge_url_type(char *url)
 {
@@ -28,6 +29,7 @@ int judge_url_type(char *url)
     }
     return -1;
 }
+
 int get_exe_dir(char *path,int size)
 {
     int count; 
@@ -44,6 +46,17 @@ int get_exe_dir(char *path,int size)
 
     return 0;
 }
+void init_exe_dir()
+{
+   //获取当前目录
+   int ret=get_exe_dir(g_cur_exe_dir,MAX_LINE_SIZE);
+   if(ret < 0) 
+   {
+       printf("获取程序目录出错，程序退出\n");
+       exit(0);
+   }
+}
+
 void request_parse_url(char *buf,int bufsize,char *url,int linesize)
 {
     int i = 0,j = 0;
@@ -132,12 +145,8 @@ int request_handle(int listenfd,int client,int epollfd)
            
             if(strncmp ( buf, "GET", 3 ) == 0)
             {
-                //获取当前目录
-                char cur_dir[MAX_LINE_SIZE];
-                ret=get_exe_dir(cur_dir,MAX_LINE_SIZE);
-                if(ret < 0) return -1; 
                 //得出网页的本地路径
-                sprintf(path, "%s/%s%s", cur_dir,DIR_HTDOCS,url);
+                sprintf(path, "%s/%s%s", g_cur_exe_dir,DIR_HTDOCS,url);
                 ret=judge_url_type(url);
                 if (ret == 0)//是目录
                 {

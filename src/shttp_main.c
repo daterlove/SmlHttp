@@ -16,6 +16,7 @@ int main(int argc,char **argv)
 {
     int recordnum=-1;
     string_get_argments(argc,argv,&recordnum);
+    init_exe_dir();
     //printf("recordnum:%d\n",recordnum);
     int ret;
 
@@ -73,7 +74,7 @@ int main(int argc,char **argv)
         return -1;
     }
     
- //--------子进程执行内容------------------------------- 
+ //--------子进程执行内容-------------------------------     
     int epollfd,fds;
     struct epoll_event events[MAX_EVENTS];//epoll触发事件
     //创建epoll句柄,并加入监听套接字
